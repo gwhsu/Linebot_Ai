@@ -1,0 +1,6 @@
+# folder
+.idea/
+__pycache__/
+
+# config secret
+config.py
