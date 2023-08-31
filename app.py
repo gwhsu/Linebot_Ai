@@ -1,6 +1,6 @@
 from flask import Flask, request, abort
 
-from config import client_id, client_secret, album_id, access_token, refresh_token, mongo_client, line_channel_access_token, line_channel_secret
+# from config import  line_channel_access_token, line_channel_secret
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -18,6 +18,10 @@ switch = False
 # -----------------------------
 app = Flask(__name__)
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+
+line_channel_access_token = os.environ.get('LINE_CHANNEL_ACCESS_TOKEN')
+line_channel_secret = os.environ.get('LINE_CHANNEL_SECRET')
+
 # Channel Access Token
 line_bot_api = LineBotApi(line_channel_access_token)
 # Channel Secret
