@@ -21,11 +21,15 @@
 import replicate
 import os
 
-def thin_plate_spline_motion(img):
+def thin_plate_spline_motion(img, video_tag_switch):
+    if video_tag_switch:
+        video = "data/v1.mp4"
+    else:
+        video = "data/v2.mp4"
     os.environ["REPLICATE_API_TOKEN"] = "r8_4Fs17YBFe6lGopG0Z0BjsxDN2bg9acB2QJvzW"
     output = replicate.run(
         "yoyo-nb/thin-plate-spline-motion-model:382ceb8a9439737020bad407dec813e150388873760ad4a5a83a2ad01b039977",
-        input={"source_image": open(img, "rb"), "driving_video": open("data/v1.mp4", "rb")}
+        input={"source_image": open(img, "rb"), "driving_video": open(video, "rb")}
     )
     #dataset_name string
     # Choose a dataset.

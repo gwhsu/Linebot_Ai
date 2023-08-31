@@ -14,7 +14,7 @@ from model_api import thin_plate_spline_motion
 
 # ======setting=====
 switch = False
-
+video_tag_switch = False
 # -----------------------------
 app = Flask(__name__)
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
@@ -46,7 +46,7 @@ def callback():
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global switch
+    global switch, video_tag_switch
     msg = event.message.text
 
     user_id = event.source.user_id
@@ -77,7 +77,11 @@ def handle_message(event):
     # elif '抽卡' in msg:
     #     url, rd_img, title = get_pttinfo()
     #     message = ptt_drawcard(url, rd_img, title)
-
+    elif '!video_tag_switch':
+        if video_tag_switch:
+            video_tag_switch = False
+        else:
+            video_tag_switch = True
     elif '!Hulan' in msg:
         message = Hulan(msg)
 
@@ -115,7 +119,7 @@ def handle_message(event):
             for chunk in response.iter_content():
                 f.write(chunk)
 
-        video_url = thin_plate_spline_motion("user_image.jpg")
+        video_url = thin_plate_spline_motion("user_image.jpg", video_tag_switch)
         video_message = VideoSendMessage(
             original_content_url=video_url,
             preview_image_url=get_img_url()
