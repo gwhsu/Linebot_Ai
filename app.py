@@ -74,8 +74,8 @@ def handle_message(event):
         txt += '🔥 ' + '占卜 @[str]' + ' 🔥\n'
         message = TextSendMessage(text=txt)
 
-    elif '占卜 @' in msg:
-        message = procast(msg)
+    # elif '占卜 @' in msg:
+    #     message = procast(msg)
 
     # elif '抽卡' in msg:
     #     url, rd_img, title = get_pttinfo()
@@ -93,9 +93,9 @@ def handle_message(event):
             txt = '開 :)'
 
         message = TextSendMessage(text=txt)
-    elif '!getlineid' in msg:
-        lineid_mapping(profile.display_name, profile.user_id)
-        message = TextSendMessage(text=profile.user_id)
+    # elif '!getlineid' in msg:
+    #     lineid_mapping(profile.display_name, profile.user_id)
+    #     message = TextSendMessage(text=profile.user_id)
     elif '!broadcast' in msg:
         message = msg.split(' ')[1]
         line_bot_api.broadcast(TextSendMessage(text=message))

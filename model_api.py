@@ -1,4 +1,4 @@
-from gradio_client import Client
+# from gradio_client import Client
 #
 # client = Client("https://hysts-controlnet-v1-1.hf.space/")
 # result = client.predict(
