@@ -116,7 +116,7 @@ def Hulan(msg):
 #         image = image.screenshot_as_png
 #         file.write(image)
 #
-#     client = ImgurClient(client_id, client_secret, access_token, refresh_token)
+#     client = ImgurClient(client_id, client_se ret, access_token, refresh_token)
 #     config = {
 #         'album': album_id,
 #         'name': 'Catastrophe!',
