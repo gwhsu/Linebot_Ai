@@ -121,7 +121,7 @@ def handle_message(event):
             preview_image_url=get_img_url()
         )
 
-        line_bot_api.push_message(user_id, video_message)
+        line_bot_api.reply_message(event.reply_token, video_message)
 
 @handler.add(JoinEvent)
 def handle_join(event):
