@@ -7,7 +7,7 @@ from selenium import webdriver
 import cv2
 import os
 import time
-from config import client_id, client_secret, access_token, refresh_token, album_id, mongo_client, mongo_client_ccsue
+# from config import client_id, client_secret, access_token, refresh_token, album_id, mongo_client, mongo_client_ccsue
 
 
 
@@ -19,32 +19,32 @@ def set_msg(msg):
         return message
 
 
-def procast(msg):
-    db = mongo_client.get_database('linebot')
-    records = db.personality
-    df = pd.read_csv("data/personality1.csv")
-    rd = random.randint(0, 73)
-    name = msg.split('@')[1]
-    score = rd + 26
-    myquery = {"Name": name}
-    count_p = records.count_documents(myquery)
-    if count_p == 0:
-        txt = '🔥 ' + name + '的人品分數: '+ str(score)+' 🔥\n'
-        txt = txt + str(df.iloc[rd, 0])
-        new_msg = {
-            'Name': name,
-            'score': score,
-            'txt': txt
-        }
-        records.insert_one(new_msg)
-        message = TextSendMessage(text=txt)
-
-        return message
-
-    else:
-        for x in records.find(myquery):
-            message = TextSendMessage(text=x['txt'])
-        return message
+# def procast(msg):
+#     db = mongo_client.get_database('linebot')
+#     records = db.personality
+#     df = pd.read_csv("data/personality1.csv")
+#     rd = random.randint(0, 73)
+#     name = msg.split('@')[1]
+#     score = rd + 26
+#     myquery = {"Name": name}
+#     count_p = records.count_documents(myquery)
+#     if count_p == 0:
+#         txt = '🔥 ' + name + '的人品分數: '+ str(score)+' 🔥\n'
+#         txt = txt + str(df.iloc[rd, 0])
+#         new_msg = {
+#             'Name': name,
+#             'score': score,
+#             'txt': txt
+#         }
+#         records.insert_one(new_msg)
+#         message = TextSendMessage(text=txt)
+#
+#         return message
+#
+#     else:
+#         for x in records.find(myquery):
+#             message = TextSendMessage(text=x['txt'])
+#         return message
 
 def Hulan(msg):
     print('Start REQUEST')
@@ -77,56 +77,56 @@ def Hulan(msg):
 
     return message
 
-def img2anime(img_path):
-    static_tmp_path = os.path.join(os.path.dirname(__file__))
-    print(static_tmp_path)
-    img_path = static_tmp_path + '/' + img_path
-    print(img_path)
-
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    chrome_options.add_argument("--headless")  # 無頭模式
-    chrome_options.add_argument("--start-maximized")  
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    chrome = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-
-    chrome.get("https://animefilter.com/")
-
-    image = cv2.imread(img_path)
-
-    height, width = image.shape[0], image.shape[1]
-    width_new = 300
-    height_new = 300
-
-    if width / height >= width_new / height_new:
-        img_new = cv2.resize(image, (width_new, int(height * width_new / width)))
-    else:
-        img_new = cv2.resize(image, (int(width * height_new / height), height_new))
-    
-    cv2.imwrite(img_path, img_new)
-
-    chrome.find_element_by_xpath('//input[@type="file"]').send_keys(img_path)
-    alert = chrome.switch_to.alert
-    alert.accept()  # accept alert
-    time.sleep(25)
-
-    with open('output.png', 'wb') as file:
-        image = chrome.find_element_by_xpath('//*[@id="outputEl"]/div/div/img')
-        image = image.screenshot_as_png
-        file.write(image)
-
-    client = ImgurClient(client_id, client_secret, access_token, refresh_token)
-    config = {
-        'album': album_id,
-        'name': 'Catastrophe!',
-        'title': 'Catastrophe!',
-        'description': 'Catastrophe '
-    }
-    client.upload_from_path('output.png', config=config, anon=False)
-
-    for image in client.get_album_images(album_id):
-        image_title = image.title if image.title else 'Untitled'
-    print(image.link)
-
-    return image.link
+# def img2anime(img_path):
+#     static_tmp_path = os.path.join(os.path.dirname(__file__))
+#     print(static_tmp_path)
+#     img_path = static_tmp_path + '/' + img_path
+#     print(img_path)
+#
+#     chrome_options = webdriver.ChromeOptions()
+#     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+#     chrome_options.add_argument("--headless")  # 無頭模式
+#     chrome_options.add_argument("--start-maximized")
+#     chrome_options.add_argument("--disable-dev-shm-usage")
+#     chrome_options.add_argument("--no-sandbox")
+#     chrome = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+#
+#     chrome.get("https://animefilter.com/")
+#
+#     image = cv2.imread(img_path)
+#
+#     height, width = image.shape[0], image.shape[1]
+#     width_new = 300
+#     height_new = 300
+#
+#     if width / height >= width_new / height_new:
+#         img_new = cv2.resize(image, (width_new, int(height * width_new / width)))
+#     else:
+#         img_new = cv2.resize(image, (int(width * height_new / height), height_new))
+#
+#     cv2.imwrite(img_path, img_new)
+#
+#     chrome.find_element_by_xpath('//input[@type="file"]').send_keys(img_path)
+#     alert = chrome.switch_to.alert
+#     alert.accept()  # accept alert
+#     time.sleep(25)
+#
+#     with open('output.png', 'wb') as file:
+#         image = chrome.find_element_by_xpath('//*[@id="outputEl"]/div/div/img')
+#         image = image.screenshot_as_png
+#         file.write(image)
+#
+#     client = ImgurClient(client_id, client_secret, access_token, refresh_token)
+#     config = {
+#         'album': album_id,
+#         'name': 'Catastrophe!',
+#         'title': 'Catastrophe!',
+#         'description': 'Catastrophe '
+#     }
+#     client.upload_from_path('output.png', config=config, anon=False)
+#
+#     for image in client.get_album_images(album_id):
+#         image_title = image.title if image.title else 'Untitled'
+#     print(image.link)
+#
+#     return image.link
