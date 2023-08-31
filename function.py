@@ -7,8 +7,8 @@ from selenium import webdriver
 import cv2
 import os
 import time
-# from config import client_id, client_secret, access_token, refresh_token, album_id, mongo_client, mongo_client_ccsue
-
+from config import client_id, client_secret, access_token, refresh_token, album_id, mongo_client, mongo_client_ccsue
+import datetime
 
 
 def set_msg(msg):
@@ -18,6 +18,22 @@ def set_msg(msg):
 
         return message
 
+def get_img_url():
+    client = ImgurClient(client_id, client_secret, access_token, refresh_token)
+    config = {
+        'album': album_id,
+        'name': 'test!',
+        'title': 'test!',
+        'description': 'test '
+    }
+    client.upload_from_path('user_image.jpg', config=config, anon=False)
+
+    images = client.get_album_images(album_id)
+    latest_image = images[-1]
+
+    print(latest_image.link)
+
+    return latest_image.link
 
 # def procast(msg):
 #     db = mongo_client.get_database('linebot')

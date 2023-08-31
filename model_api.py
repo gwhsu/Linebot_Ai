@@ -18,7 +18,6 @@
 #
 # print(result)
 
-
 import replicate
 import os
 
@@ -35,4 +34,5 @@ def thin_plate_spline_motion(img):
 
     # out is uri : example: https://replicate.delivery/pbxt/NHZcFRW1eyUpNS5TbhqUyAOHnoGC4b49YSecAEyeLu90M0eFB/output.mp4
     return output
+
 
