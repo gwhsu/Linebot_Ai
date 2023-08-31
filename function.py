@@ -7,7 +7,7 @@ from selenium import webdriver
 import cv2
 import os
 import time
-from config import client_id, client_secret, access_token, refresh_token, album_id, mongo_client, mongo_client_ccsue
+from config import client_id, client_secret, access_token, refresh_token, album_id, mongo_client
 import datetime
 
 
