@@ -1,6 +1,6 @@
 from flask import Flask, request, abort
 
-from config import  line_channel_access_token, line_channel_secret
+from config import line_channel_access_token, line_channel_secret
 from linebot import (
     LineBotApi, WebhookHandler
 )
