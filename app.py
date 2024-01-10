@@ -7,7 +7,7 @@ from linebot import (
 from linebot.exceptions import (
     InvalidSignatureError
 )
-from mongodb import *
+
 from function import *
 import os
 from model_api import thin_plate_spline_motion
@@ -77,11 +77,12 @@ def handle_message(event):
     # elif '抽卡' in msg:
     #     url, rd_img, title = get_pttinfo()
     #     message = ptt_drawcard(url, rd_img, title)
-    elif '!video_tag_switch':
+    elif '!video_tag_switch' in msg:
         if video_tag_switch:
             video_tag_switch = False
         else:
             video_tag_switch = True
+
     elif '!Hulan' in msg:
         message = Hulan(msg)
 
@@ -98,6 +99,7 @@ def handle_message(event):
     #     lineid_mapping(profile.display_name, profile.user_id)
     #     message = TextSendMessage(text=profile.user_id)
     elif '!broadcast' in msg:
+        print('broadcast')
         message = msg.split(' ')[1]
         line_bot_api.broadcast(TextSendMessage(text=message))
     else:
