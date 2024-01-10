@@ -1,8 +1,8 @@
 from flask import Flask, request, abort
 
 from config import line_channel_access_token, line_channel_secret
-from linebot.v3 import (
-    LineBotApi, WebhookHandler
+from linebot import (
+    WebhookHandler, LineBotApi
 )
 from linebot.exceptions import (
     InvalidSignatureError
