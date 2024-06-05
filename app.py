@@ -1,12 +1,29 @@
+from config import line_channel_access_token, line_channel_secret
+
 from flask import Flask, request, abort
 
-from config import line_channel_access_token, line_channel_secret
-from linebot import (
-    WebhookHandler, LineBotApi
+from linebot.v3 import (
+    WebhookHandler
 )
-from linebot.exceptions import (
+from linebot.v3.exceptions import (
     InvalidSignatureError
 )
+from linebot.v3.messaging import (
+    Configuration,
+    ApiClient,
+    MessagingApi,
+    ReplyMessageRequest,
+    TextMessage
+)
+from linebot.v3.webhooks import (
+    MessageEvent,
+    TextMessageContent
+)
+
+app = Flask(__name__)
+
+configuration = Configuration(access_token=line_channel_access_token)
+handler = WebhookHandler(line_channel_secret)
 
 from function import *
 import os
@@ -16,13 +33,7 @@ from model_api import thin_plate_spline_motion
 switch = False
 video_tag_switch = False
 # -----------------------------
-app = Flask(__name__)
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
-
-# Channel Access Token
-line_bot_api = LineBotApi(line_channel_access_token)
-# Channel Secret
-handler = WebhookHandler(line_channel_secret)
 
 
 # 監聽所有來自 /callback 的 Post Request
@@ -34,12 +45,14 @@ def callback():
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-    
+
     # handle webhook body
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
+        app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
+
     return 'OK'
 
 

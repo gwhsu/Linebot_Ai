@@ -2,7 +2,6 @@ line-bot-sdk
 flask
 imgurpython
 pillow
-numpy
 pymongo
 pymongo[srv]
 dnspython
