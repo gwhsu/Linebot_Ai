@@ -35,7 +35,7 @@ video_tag_switch = False
 # -----------------------------
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
-
+print("Succcess")
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
 def callback():
