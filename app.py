@@ -69,6 +69,7 @@ def handle_message(event):
     elif '!op' in msg:
         txt = '🔥 ' + 'Hello' + ' 🔥\n'
         txt += '🔥 ' + '占卜 @[str]' + ' 🔥\n'
+        txt += '🔥 ' + 'Hulan [str] [Hulan size]' + ' 🔥\n'
         message = TextSendMessage(text=txt)
 
     elif '占卜 @' in msg:

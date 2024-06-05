@@ -12,6 +12,7 @@ from model_api import Assistant
 assistant = Assistant(
 
 def set_msg(msg):
+    print("set msg : Gemini")
     try:
         pre_input = "Gemini, 你現在是Line群組其中一個成員，請以凱哥的身分與群組成員對話，以下是群組成員的訊息:"
         full_msg = pre_input + msg
@@ -78,7 +79,7 @@ def Hulan(msg):
     chrome_options.add_argument("--headless")  # 無頭模式
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
-    chrome = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    chrome = webdriver.Chrome(executable_path=os.environ.get("./chromedriver.exe"), chrome_options=chrome_options)
 
     # chrome = webdriver.Chrome()
     chrome.get("https://howtobullshit.me/")
