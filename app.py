@@ -57,7 +57,7 @@ def callback():
 
 
 # 處理訊息
-@handler.add(MessageEvent, message=TextMessage)
+@handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     global switch, video_tag_switch
     with ApiClient(configuration) as api_client:
@@ -172,5 +172,6 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 10000))
+    port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+    # app.run()
