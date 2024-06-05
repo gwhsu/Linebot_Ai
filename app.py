@@ -71,8 +71,8 @@ def handle_message(event):
         txt += '🔥 ' + '占卜 @[str]' + ' 🔥\n'
         message = TextSendMessage(text=txt)
 
-    # elif '占卜 @' in msg:
-    #     message = procast(msg)
+    elif '占卜 @' in msg:
+        message = procast(msg)
     #
     # elif '抽卡' in msg:
     #     url, rd_img, title = get_pttinfo()

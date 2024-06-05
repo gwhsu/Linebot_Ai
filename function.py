@@ -9,19 +9,19 @@ import os
 import time
 from config import client_id, client_secret, access_token, refresh_token, album_id, mongo_client
 from model_api import Assistant
+assistant = Assistant(
 
 def set_msg(msg):
-    assistant = Assistant()
-    # user_input = input("Input your question (type 'exit' or 'q' to quit): ")
-    # if user_input.lower() == ('exit' or 'q'):
-    #     break
-    Pre_input = "Gemini, 你現在是Line群組其中一個成員，請以凱哥的身分與群組成員對話，以下是群組成員的訊息:"
-    msg = Pre_input + msg
-    response = assistant.ask_question(msg)
-    print(response)
-    message = TextSendMessage(text=response)
-    return message
-
+    try:
+        pre_input = "Gemini, 你現在是Line群組其中一個成員，請以凱哥的身分與群組成員對話，以下是群組成員的訊息:"
+        full_msg = pre_input + msg
+        response = assistant.ask_question(full_msg)
+        print(response)
+        message = TextSendMessage(text=response)
+        return message
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return TextSendMessage(text="An error occurred, please try again later.")
 
 def get_img_url():
     client = ImgurClient(client_id, client_secret, access_token, refresh_token)
@@ -40,32 +40,32 @@ def get_img_url():
 
     return latest_image.link
 
-# def procast(msg):
-#     db = mongo_client.get_database('linebot')
-#     records = db.personality
-#     df = pd.read_csv("data/personality1.csv")
-#     rd = random.randint(0, 73)
-#     name = msg.split('@')[1]
-#     score = rd + 26
-#     myquery = {"Name": name}
-#     count_p = records.count_documents(myquery)
-#     if count_p == 0:
-#         txt = '🔥 ' + name + '的人品分數: '+ str(score)+' 🔥\n'
-#         txt = txt + str(df.iloc[rd, 0])
-#         new_msg = {
-#             'Name': name,
-#             'score': score,
-#             'txt': txt
-#         }
-#         records.insert_one(new_msg)
-#         message = TextSendMessage(text=txt)
-#
-#         return message
-#
-#     else:
-#         for x in records.find(myquery):
-#             message = TextSendMessage(text=x['txt'])
-#         return message
+def procast(msg):
+    db = mongo_client.get_database('linebot')
+    records = db.personality
+    df = pd.read_csv("data/personality1.csv")
+    rd = random.randint(0, 73)
+    name = msg.split('@')[1]
+    score = rd + 26
+    myquery = {"Name": name}
+    count_p = records.count_documents(myquery)
+    if count_p == 0:
+        txt = '🔥 ' + name + '的人品分數: '+ str(score)+' 🔥\n'
+        txt = txt + str(df.iloc[rd, 0])
+        new_msg = {
+            'Name': name,
+            'score': score,
+            'txt': txt
+        }
+        records.insert_one(new_msg)
+        message = TextSendMessage(text=txt)
+
+        return message
+
+    else:
+        for x in records.find(myquery):
+            message = TextSendMessage(text=x['txt'])
+        return message
 
 def Hulan(msg):
     print('Start REQUEST')
