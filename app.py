@@ -25,6 +25,7 @@ app = Flask(__name__)
 configuration = Configuration(access_token=line_channel_access_token)
 handler = WebhookHandler(line_channel_secret)
 line_bot_api = MessagingApi(api_client)
+
 from function import *
 import os
 from model_api import thin_plate_spline_motion
@@ -60,67 +61,74 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global switch, video_tag_switch
-    msg = event.message.text
+    with ApiClient(configuration) as api_client:
+        line_bot_api = MessagingApi(api_client)
+        msg = event.message.text
 
-    user_id = event.source.user_id
-    print('get user id::', user_id)
-    profile = line_bot_api.get_profile(user_id)
-    print('get profile pass::', profile)
+        user_id = event.source.user_id
+        print('get user id::', user_id)
+        profile = line_bot_api.get_profile(user_id)
+        print('get profile pass::', profile)
 
-    # INFO -------------------------------
-    print(profile.display_name)
-    print(profile.user_id)
-    print(profile.picture_url)
-    print(profile.status_message)
-    print('join')
+        # INFO -------------------------------
+        print(profile.display_name)
+        print(profile.user_id)
+        print(profile.picture_url)
+        print(profile.status_message)
+        print('join')
 
-    # need build a operation list (json)
-    if 'Hello' in msg:
-        message = 'Hello ' + str(profile.display_name)
-        message = TextSendMessage(text=message)
+        # need build a operation list (json)
+        if 'Hello' in msg:
+            message = 'Hello ' + str(profile.display_name)
+            message = TextSendMessage(text=message)
 
-    elif '!op' in msg:
-        txt = '🔥 ' + 'Hello' + ' 🔥\n'
-        txt += '🔥 ' + '占卜 @[str]' + ' 🔥\n'
-        txt += '🔥 ' + 'Hulan [str] [Hulan size]' + ' 🔥\n'
-        message = TextSendMessage(text=txt)
+        elif '!op' in msg:
+            txt = '🔥 ' + 'Hello' + ' 🔥\n'
+            txt += '🔥 ' + '占卜 @[str]' + ' 🔥\n'
+            txt += '🔥 ' + 'Hulan [str] [Hulan size]' + ' 🔥\n'
+            message = TextSendMessage(text=txt)
 
-    elif '占卜 @' in msg:
-        message = procast(msg)
-    #
-    # elif '抽卡' in msg:
-    #     url, rd_img, title = get_pttinfo()
-    #     message = ptt_drawcard(url, rd_img, title)
-    elif '!video_tag_switch' in msg:
-        if video_tag_switch:
-            video_tag_switch = False
+        elif '占卜 @' in msg:
+            message = procast(msg)
+        #
+        # elif '抽卡' in msg:
+        #     url, rd_img, title = get_pttinfo()
+        #     message = ptt_drawcard(url, rd_img, title)
+        elif '!video_tag_switch' in msg:
+            if video_tag_switch:
+                video_tag_switch = False
+            else:
+                video_tag_switch = True
+
+        elif '!Hulan' in msg:
+            message = Hulan(msg)
+
+        elif '!Switch' in msg:
+            if(switch):
+                switch = False
+                txt = '關 :('
+            else:
+                switch = True
+                txt = '開 :)'
+
+            message = TextSendMessage(text=txt)
+        # elif '!getlineid' in msg:
+        #     lineid_mapping(profile.display_name, profile.user_id)
+        #     message = TextSendMessage(text=profile.user_id)
+        elif '!broadcast' in msg:
+            print('broadcast')
+            message = msg.split(' ')[1]
+            line_bot_api.broadcast(TextSendMessage(text=message))
         else:
-            video_tag_switch = True
+            # set_msg in function.py
+            message = set_msg(msg)
 
-    elif '!Hulan' in msg:
-        message = Hulan(msg)
-
-    elif '!Switch' in msg:
-        if(switch):
-            switch = False
-            txt = '關 :('
-        else:
-            switch = True
-            txt = '開 :)'
-
-        message = TextSendMessage(text=txt)
-    # elif '!getlineid' in msg:
-    #     lineid_mapping(profile.display_name, profile.user_id)
-    #     message = TextSendMessage(text=profile.user_id)
-    elif '!broadcast' in msg:
-        print('broadcast')
-        message = msg.split(' ')[1]
-        line_bot_api.broadcast(TextSendMessage(text=message))
-    else:
-        # set_msg in function.py
-        message = set_msg(msg)
-
-    line_bot_api.reply_message(event.reply_token, message)
+        line_bot_api.reply_message_with_http_info(
+            ReplyMessageRequest(
+                reply_token=event.reply_token,
+                messages=[TextMessage(text=event.message.text)]
+            )
+        )
 
 
 @handler.add(MessageEvent, message=ImageMessage)
