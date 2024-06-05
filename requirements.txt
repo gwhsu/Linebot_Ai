@@ -16,4 +16,3 @@ selenium
 opencv-python-headless
 replicate
 datetime
-google-generativeai
