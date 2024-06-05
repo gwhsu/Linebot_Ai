@@ -130,45 +130,45 @@ def handle_message(event):
         )
 
 
-@handler.add(MessageEvent, message=ImageMessage)
-def handle_message(event):
-    if switch:
-        user_id = event.source.user_id
-        image_message_id = event.message.id
-
-        # 取得用戶上傳的圖片
-        response = line_bot_api.get_message_content(image_message_id)
-        with open("user_image.jpg", "wb") as f:
-            for chunk in response.iter_content():
-                f.write(chunk)
-
-        video_url = thin_plate_spline_motion("user_image.jpg", video_tag_switch)
-        video_message = VideoSendMessage(
-            original_content_url=video_url,
-            preview_image_url=get_img_url()
-        )
-
-        line_bot_api.reply_message(event.reply_token, video_message)
-
-@handler.add(JoinEvent)
-def handle_join(event):
-    newcoming_text = "I am I"
-
-    line_bot_api.reply_message(
-            event.reply_token,
-            TextMessage(text=newcoming_text)
-        )
-    print("JoinEvent =", JoinEvent)
-
-
-@handler.add(LeaveEvent)
-def handle_leave(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextMessage(text="Where I am , U r where ")
-    )
-    print("leave Event =", event)
-    print("我被踢掉了QQ ", event.source)
+# @handler.add(MessageEvent, message=ImageMessage)
+# def handle_message(event):
+#     if switch:
+#         user_id = event.source.user_id
+#         image_message_id = event.message.id
+#
+#         # 取得用戶上傳的圖片
+#         response = line_bot_api.get_message_content(image_message_id)
+#         with open("user_image.jpg", "wb") as f:
+#             for chunk in response.iter_content():
+#                 f.write(chunk)
+#
+#         video_url = thin_plate_spline_motion("user_image.jpg", video_tag_switch)
+#         video_message = VideoSendMessage(
+#             original_content_url=video_url,
+#             preview_image_url=get_img_url()
+#         )
+#
+#         line_bot_api.reply_message(event.reply_token, video_message)
+#
+# @handler.add(JoinEvent)
+# def handle_join(event):
+#     newcoming_text = "I am I"
+#
+#     line_bot_api.reply_message(
+#             event.reply_token,
+#             TextMessage(text=newcoming_text)
+#         )
+#     print("JoinEvent =", JoinEvent)
+#
+#
+# @handler.add(LeaveEvent)
+# def handle_leave(event):
+#     line_bot_api.reply_message(
+#         event.reply_token,
+#         TextMessage(text="Where I am , U r where ")
+#     )
+#     print("leave Event =", event)
+#     print("我被踢掉了QQ ", event.source)
 
 
 if __name__ == "__main__":
