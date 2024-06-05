@@ -9,7 +9,7 @@ import os
 import time
 from config import client_id, client_secret, access_token, refresh_token, album_id, mongo_client
 from model_api import Assistant
-assistant = Assistant(
+assistant = Assistant()
 
 def set_msg(msg):
     print("set msg : Gemini")
