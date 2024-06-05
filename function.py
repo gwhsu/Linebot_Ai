@@ -20,11 +20,11 @@ def set_msg(msg):
         full_msg = pre_input + msg
         response = assistant.ask_question(full_msg)
         print(response)
-        message = TextSendMessage(text=response)
+        message = TextMessage(text=response)
         return message
     except Exception as e:
         print(f"An error occurred: {e}")
-        return TextSendMessage(text="An error occurred, please try again later.")
+        return TextMessage(text="An error occurred, please try again later.")
 
 def get_img_url():
     client = ImgurClient(client_id, client_secret, access_token, refresh_token)

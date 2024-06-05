@@ -79,13 +79,13 @@ def handle_message(event):
         # need build a operation list (json)
         if 'Hello' in msg:
             message = 'Hello ' + str(profile.display_name)
-            message = TextSendMessage(text=message)
+            message = TextMessage(text=message)
 
         elif '!op' in msg:
             txt = '🔥 ' + 'Hello' + ' 🔥\n'
             txt += '🔥 ' + '占卜 @[str]' + ' 🔥\n'
             txt += '🔥 ' + 'Hulan [str] [Hulan size]' + ' 🔥\n'
-            message = TextSendMessage(text=txt)
+            message = TextMessage(text=txt)
 
         elif '占卜 @' in msg:
             message = procast(msg)
@@ -110,14 +110,14 @@ def handle_message(event):
                 switch = True
                 txt = '開 :)'
 
-            message = TextSendMessage(text=txt)
+            message = TextMessage(text=txt)
         # elif '!getlineid' in msg:
         #     lineid_mapping(profile.display_name, profile.user_id)
         #     message = TextSendMessage(text=profile.user_id)
         elif '!broadcast' in msg:
             print('broadcast')
             message = msg.split(' ')[1]
-            line_bot_api.broadcast(TextSendMessage(text=message))
+            line_bot_api.broadcast(TextMessage(text=message))
         else:
             # set_msg in function.py
             message = set_msg(msg)
