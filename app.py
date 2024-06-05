@@ -1,3 +1,5 @@
+from config import line_channel_access_token, line_channel_secret
+
 from flask import Flask, request, abort
 
 from linebot.v3 import (
@@ -20,8 +22,8 @@ from linebot.v3.webhooks import (
 
 app = Flask(__name__)
 
-configuration = Configuration(access_token='YOUR_CHANNEL_ACCESS_TOKEN')
-handler = WebhookHandler('YOUR_CHANNEL_SECRET')
+configuration = Configuration(access_token=line_channel_access_token)
+handler = WebhookHandler(line_channel_secret)
 
 
 @app.route("/callback", methods=['POST'])
