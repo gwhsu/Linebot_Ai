@@ -24,7 +24,7 @@ app = Flask(__name__)
 
 configuration = Configuration(access_token=line_channel_access_token)
 handler = WebhookHandler(line_channel_secret)
-
+line_bot_api = MessagingApi(api_client)
 from function import *
 import os
 from model_api import thin_plate_spline_motion
