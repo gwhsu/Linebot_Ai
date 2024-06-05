@@ -73,7 +73,7 @@ def handle_message(event):
 
     # elif '占卜 @' in msg:
     #     message = procast(msg)
-
+    #
     # elif '抽卡' in msg:
     #     url, rd_img, title = get_pttinfo()
     #     message = ptt_drawcard(url, rd_img, title)

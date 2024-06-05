@@ -13,3 +13,6 @@ refresh_token = os.environ.get('IMGUR_CLIENT_REFRESH_TOKEN')
 from pymongo import MongoClient
 mongodb_token = os.environ.get('MONGODB_TOKEN')
 mongo_client = MongoClient(mongodb_token)
+
+# GeminiAI
+Gemini_api_key = os.environ.get('Gemini_api_key')

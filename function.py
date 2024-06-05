@@ -8,15 +8,20 @@ import cv2
 import os
 import time
 from config import client_id, client_secret, access_token, refresh_token, album_id, mongo_client
-import datetime
-
+from model_api import Assistant
 
 def set_msg(msg):
-    if 'CC' in msg:
-        msg = '你在笑什麼'
-        message = TextSendMessage(text=msg)
+    assistant = Assistant()
+    # user_input = input("Input your question (type 'exit' or 'q' to quit): ")
+    # if user_input.lower() == ('exit' or 'q'):
+    #     break
+    Pre_input = "Gemini, 你現在是Line群組其中一個成員，請以凱哥的身分與群組成員對話，以下是群組成員的訊息:"
+    msg = Pre_input + msg
+    response = assistant.ask_question(msg)
+    print(response)
+    message = TextSendMessage(text=response)
+    return message
 
-        return message
 
 def get_img_url():
     client = ImgurClient(client_id, client_secret, access_token, refresh_token)

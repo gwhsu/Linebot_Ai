@@ -1,25 +1,8 @@
-# from gradio_client import Client
-#
-# client = Client("https://hysts-controlnet-v1-1.hf.space/")
-# result = client.predict(
-# 				"https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png",	# str (filepath or URL to image) in 'parameter_8' Image component
-# 				"Howdy!",	# str in 'Prompt' Textbox component
-# 				"Howdy!",	# str in 'Additional prompt' Textbox component
-# 				"Howdy!",	# str in 'Negative prompt' Textbox component
-# 				1,	# int | float (numeric value between 1 and 1) in 'Number of images' Slider component
-# 				256,	# int | float (numeric value between 256 and 768) in 'Image resolution' Slider component
-# 				1,	# int | float (numeric value between 1 and 100) in 'Number of steps' Slider component
-# 				0.1,	# int | float (numeric value between 0.1 and 30.0) in 'Guidance scale' Slider component
-# 				0,	# int | float (numeric value between 0 and 2147483647) in 'Seed' Slider component
-# 				1,	# int | float (numeric value between 1 and 255) in 'Canny low threshold' Slider component
-# 				1,	# int | float (numeric value between 1 and 255) in 'Canny high threshold' Slider component
-# 				api_name="/canny"
-# )
-#
-# print(result)
-
 import replicate
 import os
+import google.generativeai as genai
+import config
+
 
 def thin_plate_spline_motion(img, video_tag_switch):
     if video_tag_switch:
@@ -40,3 +23,44 @@ def thin_plate_spline_motion(img, video_tag_switch):
     return output
 
 
+
+class Assistant:
+    def __init__(self):
+        genai.configure(api_key=config.Gemini_api_key)
+
+        # Set up the model
+        generation_config = {
+            "temperature": 1,
+            "top_p": 0.95,
+            "top_k": 64,
+            "max_output_tokens": 8192,
+        }
+
+        safety_settings = [
+            {
+                "category": "HARM_CATEGORY_HARASSMENT",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+            {
+                "category": "HARM_CATEGORY_HATE_SPEECH",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+            {
+                "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+            {
+                "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+        ]
+
+        self.model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
+                                           generation_config=generation_config,
+                                           safety_settings=safety_settings)
+
+        self.convo = self.model.start_chat(history=[])
+
+    def ask_question(self, question):
+        self.convo.send_message(question)
+        return self.convo.last.text
