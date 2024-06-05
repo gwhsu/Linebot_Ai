@@ -26,6 +26,7 @@ def thin_plate_spline_motion(img, video_tag_switch):
 
 class Assistant:
     def __init__(self):
+        print(dir(genai))
         genai.configure(api_key=config.Gemini_api_key)
 
         # Set up the model
