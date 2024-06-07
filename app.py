@@ -33,35 +33,36 @@ video_tag_switch = False
 # -----------------------------
 # static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
-print("Succcess")
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
 def callback():
+    print("Enter in callback")
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
 
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-
+    print("Hi")
     # handle webhook body
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
         app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
-
+    print("OKOKOK")
     return 'OK'
 
 
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
-    #global switch, video_tag_switch
+    global switch, video_tag_switch
     print("HELLOOOOO")
+    msg = event.message.text
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
-        msg = event.message.text
+
 
         user_id = event.source.user_id
         print('get user id::', user_id)
@@ -148,29 +149,7 @@ def handle_message(event):
 #         )
 #
 #         line_bot_api.reply_message(event.reply_token, video_message)
-#
-# @handler.add(JoinEvent)
-# def handle_join(event):
-#     newcoming_text = "I am I"
-#
-#     line_bot_api.reply_message(
-#             event.reply_token,
-#             TextMessage(text=newcoming_text)
-#         )
-#     print("JoinEvent =", JoinEvent)
-#
-#
-# @handler.add(LeaveEvent)
-# def handle_leave(event):
-#     line_bot_api.reply_message(
-#         event.reply_token,
-#         TextMessage(text="Where I am , U r where ")
-#     )
-#     print("leave Event =", event)
-#     print("我被踢掉了QQ ", event.source)
-
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
-    # app.run()
