@@ -1,5 +1,4 @@
 import random
-from linebot.models import *
 from imgurpython import ImgurClient
 from pymongo import MongoClient
 import pandas as pd
@@ -10,7 +9,13 @@ import time
 from config import client_id, client_secret, access_token, refresh_token, album_id, mongo_client
 from model_api import Assistant
 
-
+from linebot.v3.messaging import (
+    Configuration,
+    ApiClient,
+    MessagingApi,
+    ReplyMessageRequest,
+    TextMessage
+)
 assistant = Assistant()
 
 def set_msg(msg):
@@ -61,13 +66,13 @@ def procast(msg):
             'txt': txt
         }
         records.insert_one(new_msg)
-        message = TextSendMessage(text=txt)
+        message = TextMessage(text=txt)
 
         return message
 
     else:
         for x in records.find(myquery):
-            message = TextSendMessage(text=x['txt'])
+            message = TextMessage(text=x['txt'])
         return message
 
 def Hulan(msg):
@@ -97,7 +102,7 @@ def Hulan(msg):
 
     content = chrome.find_element_by_id("content")
 
-    message = TextSendMessage(text=content.text)
+    message = TextMessage(text=content.text)
 
     return message
 

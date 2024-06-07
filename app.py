@@ -1,3 +1,6 @@
+from function import *
+import os
+
 from config import line_channel_access_token, line_channel_secret
 
 from flask import Flask, request, abort
@@ -19,8 +22,7 @@ from linebot.v3.webhooks import (
     MessageEvent,
     TextMessageContent
 )
-from function import *
-import os
+
 
 app = Flask(__name__)
 
@@ -30,8 +32,7 @@ handler = WebhookHandler(line_channel_secret)
 # ======setting=====
 switch = False
 video_tag_switch = False
-# -----------------------------
-# static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+
 
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
@@ -53,8 +54,6 @@ def callback():
     print("OKOKOK")
     return 'OK'
 
-
-# 處理訊息
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     global switch, video_tag_switch
