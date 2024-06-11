@@ -3,8 +3,7 @@
 # from pymongo import MongoClient
 # from imgurpython import ImgurClient
 # from config import client_id, client_secret, access_token, refresh_token, mongo_client, mongo_client_ccsue
-# from linebot.models import *
-#
+
 # client = ImgurClient(client_id, client_secret, access_token, refresh_token)
 #
 #

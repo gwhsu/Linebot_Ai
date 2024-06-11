@@ -68,16 +68,16 @@ def handle_message(event):
         line_bot_api = MessagingApi(api_client)
 
         user_id = event.source.user_id
-        print('get user id::', user_id)
-        profile = line_bot_api.get_profile(user_id)
-        print('get profile pass::', profile)
-
-        # INFO -------------------------------
-        print(profile.display_name)
-        print(profile.user_id)
-        print(profile.picture_url)
-        print(profile.status_message)
-        print('join')
+        # print('get user id::', user_id)
+        # profile = line_bot_api.get_profile(user_id)
+        # print('get profile pass::', profile)
+        #
+        # # INFO -------------------------------
+        # print(profile.display_name)
+        # print(profile.user_id)
+        # print(profile.picture_url)
+        # print(profile.status_message)
+        # print('join')
 
         # need build a operation list (json)
         if 'Hello' in msg:
@@ -149,12 +149,14 @@ def handle_message(event):
                     f.write(chunk)
 
             video_url = thin_plate_spline_motion("user_image.jpg", video_tag_switch)
-            video_message = VideoMessage(
+            video_message = VideoSendMessage(
                 original_content_url=video_url,
                 preview_image_url=get_img_url()
             )
-
-            line_bot_api.reply_message(event.reply_token, video_message)
+            line_bot_api.reply_message(
+                event.reply_token,
+                [TextMessage(text='影片已生成：'), video_message]
+            )
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
