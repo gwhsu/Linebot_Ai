@@ -1,8 +1,7 @@
-from function import *
+# Standard
 import os
 
-from config import line_channel_access_token, line_channel_secret
-
+# Linebot relative
 from flask import Flask, request, abort
 
 from linebot.v3 import (
@@ -16,12 +15,19 @@ from linebot.v3.messaging import (
     ApiClient,
     MessagingApi,
     ReplyMessageRequest,
-    TextMessage
+    TextMessage,
+    VideoMessage,
+    ImageMessage
 )
 from linebot.v3.webhooks import (
     MessageEvent,
-    TextMessageContent
+    TextMessageContent,
+    ImageMessageContent,
 )
+
+from function import *
+from model_api import *
+from config import line_channel_access_token, line_channel_secret
 
 
 app = Flask(__name__)
@@ -37,31 +43,29 @@ video_tag_switch = False
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
 def callback():
-    print("Enter in callback")
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
 
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-    print("Hi")
+
     # handle webhook body
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
         app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
-    print("OKOKOK")
+
     return 'OK'
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     global switch, video_tag_switch
-    print("HELLOOOOO")
+
     msg = event.message.text
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
-
 
         user_id = event.source.user_id
         print('get user id::', user_id)
@@ -88,7 +92,6 @@ def handle_message(event):
 
         elif '占卜 @' in msg:
             message = procast(msg)
-        #
         # elif '抽卡' in msg:
         #     url, rd_img, title = get_pttinfo()
         #     message = ptt_drawcard(url, rd_img, title)
@@ -116,12 +119,13 @@ def handle_message(event):
         elif '!broadcast' in msg:
             print('broadcast')
             message = msg.split(' ')[1]
-            line_bot_api.broadcast(TextMessage(text=message))
+            # for user_id in user_ids:
+            line_bot_api.push_message(user_id, messages=message)
+            # line_bot_api.push_message(TextMessage(text=message))
         else:
-            # set_msg in function.py
-            message = set_msg(msg)
-        print(type([message]))
-        print(message)
+            # Gemini Ai  in function.py
+            message = Gemini_msg(msg)
+
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
@@ -129,25 +133,28 @@ def handle_message(event):
             )
         )
 
-# @handler.add(MessageEvent, message=ImageMessage)
-# def handle_message(event):
-#     if switch:
-#         user_id = event.source.user_id
-#         image_message_id = event.message.id
-#
-#         # 取得用戶上傳的圖片
-#         response = line_bot_api.get_message_content(image_message_id)
-#         with open("user_image.jpg", "wb") as f:
-#             for chunk in response.iter_content():
-#                 f.write(chunk)
-#
-#         video_url = thin_plate_spline_motion("user_image.jpg", video_tag_switch)
-#         video_message = VideoSendMessage(
-#             original_content_url=video_url,
-#             preview_image_url=get_img_url()
-#         )
-#
-#         line_bot_api.reply_message(event.reply_token, video_message)
+@handler.add(MessageEvent, message=ImageMessageContent)
+def handle_message(event):
+    with ApiClient(configuration) as api_client:
+        line_bot_api = MessagingApi(api_client)
+
+        if switch:
+            user_id = event.source.user_id
+            image_message_id = event.message.id
+
+            # 取得用戶上傳的圖片
+            response = line_bot_api.get_message_content(image_message_id)
+            with open("user_image.jpg", "wb") as f:
+                for chunk in response.iter_content():
+                    f.write(chunk)
+
+            video_url = thin_plate_spline_motion("user_image.jpg", video_tag_switch)
+            video_message = VideoMessage(
+                original_content_url=video_url,
+                preview_image_url=get_img_url()
+            )
+
+            line_bot_api.reply_message(event.reply_token, video_message)
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))

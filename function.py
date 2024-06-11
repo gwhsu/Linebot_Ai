@@ -18,7 +18,7 @@ from linebot.v3.messaging import (
 )
 assistant = Assistant()
 
-def set_msg(msg):
+def Gemini_msg(msg):
     print("set msg : Gemini")
     try:
         pre_input = "Gemini, 你現在是Line群組其中一個成員，請以凱哥的身分與群組成員對話，以下是群組成員的訊息:"
