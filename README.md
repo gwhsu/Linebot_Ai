@@ -1,21 +1,25 @@
 ﻿# Linebot
 
 ## Configuration (Modify in config.py):
-- Line access token
-- Imgur token
-- MongoDB token
+- Line access token : 連結Line bot
+- Imgur token       : 保存相片至imgur
+- MongoDB token     : 關鍵字對話 
 
 ## Deployment:
-Deploy on Render cloud (free)
+Deploy on Render cloud (free) : https://render.com/
 Enter secret keys (config keys) in Render settings
 
 ## Functions:
+- Gemini AI
 - Ptt Draw Card
 - Auto Reply
 - Image2Anime
 
 # Artificial Intelligence:
 Utilizes an API-connected model in `model_api.py`.
+
+** Gemini API ** 
+- 官方 : https://ai.google.dev/gemini-api 
 
 **Model Information:**
 - Model Name: Thin-Plate-Spline-Motion-Model Public
