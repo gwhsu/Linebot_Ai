@@ -28,7 +28,7 @@ from linebot.v3.webhooks import (
 from function import *
 from model_api import *
 from config import line_channel_access_token, line_channel_secret
-
+from mongodb import check_mode
 
 app = Flask(__name__)
 
@@ -124,7 +124,9 @@ def handle_message(event):
             # line_bot_api.push_message(TextMessage(text=message))
         else:
             # Gemini Ai  in function.py
-            message = Gemini_msg(msg)
+            print(check_mode())
+            if(check_mode() != "quiet"):
+                message = Gemini_msg(msg)
 
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
