@@ -28,7 +28,7 @@ from linebot.v3.webhooks import (
 from function import *
 from model_api import *
 from config import line_channel_access_token, line_channel_secret
-from mongodb import check_mode
+from mongodb import check_mode, mode_change
 
 app = Flask(__name__)
 
@@ -95,6 +95,9 @@ def handle_message(event):
         # elif '抽卡' in msg:
         #     url, rd_img, title = get_pttinfo()
         #     message = ptt_drawcard(url, rd_img, title)
+        elif "安靜" or "說話" in msg:
+            mode_change(msg)
+
         elif '!video_tag_switch' in msg:
             if video_tag_switch:
                 video_tag_switch = False
